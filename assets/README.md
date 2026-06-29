@@ -1,9 +1,9 @@
-﻿# Assets
+# Assets
 
 Runtime artifacts are grouped here:
 
-- `checkerBoard/calibration_images/`: current camera calibration images.
-- `Video test/`: retained sample frames.
+- `checkerBoard/calibration_images/`: current camera calibration images and the default smoke-test image.
+- `sample_images/`: optional retained sample frames for real measurement runs.
 - `weights/`: optional YOLO `.pt` or `.onnx` files.
 - `sample_videos/`: optional input videos.
 - `ground_truth/`: optional speed-validation PKL files.

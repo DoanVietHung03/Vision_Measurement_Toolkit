@@ -1,6 +1,6 @@
-﻿{
+{
   "input": {
-    "image_path": "assets/Video test/Video test/cam_2/frame_test.jpg",
+    "image_path": "assets/checkerBoard/calibration_images/calib_000.jpg",
     "video_path": "assets/sample_videos/cam_2.mp4"
   },
   "depth": {
