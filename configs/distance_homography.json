@@ -1,0 +1,35 @@
+﻿{
+  "input": {
+    "image_path": "assets/Video test/Video test/cam_2/frame_test.jpg",
+    "video_path": "assets/sample_videos/cam_2.mp4",
+    "camera_calibration_json": "configs/generated_camera_calibration.json"
+  },
+  "calibration": {
+    "source_points": [
+      [100.0, 100.0],
+      [500.0, 100.0],
+      [500.0, 500.0],
+      [100.0, 500.0]
+    ],
+    "target_width": 400.0,
+    "target_height": 400.0,
+    "meters_per_pixel": 0.01
+  },
+  "measurement": {
+    "point_a": [150.0, 150.0],
+    "point_b": [450.0, 150.0],
+    "target_point": [300.0, 300.0]
+  },
+  "height": {
+    "camera_position_m": [0.5, -18.0],
+    "allow_fallback": false
+  },
+  "model": {
+    "yolo_pose_path": "assets/weights/yolo11n-pose.onnx",
+    "confidence": 0.35
+  },
+  "video": {
+    "stabilize": true,
+    "detection_interval": 2
+  }
+}

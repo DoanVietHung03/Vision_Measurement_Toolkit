@@ -1,0 +1,28 @@
+{
+  "input": {
+    "video_path": "assets/sample_videos/road.mp4",
+    "mask_path": "assets/sample_images/lane_mask.png",
+    "ground_truth_pkl": "assets/ground_truth/gt_data.pkl"
+  },
+  "model": {
+    "path": "assets/weights/yolo12n.onnx",
+    "target_classes": [2, 3, 5, 7],
+    "tracker": "bytetrack.yaml"
+  },
+  "calibration": {
+    "source_points": [
+      [800.0, 410.0],
+      [1125.0, 410.0],
+      [1920.0, 850.0],
+      [0.0, 850.0]
+    ],
+    "target_width": 800.0,
+    "target_height": 3500.0,
+    "meters_per_pixel": 0.04
+  },
+  "speed": {
+    "default_fps": 25.0,
+    "ema_alpha": 0.3,
+    "output_unit": "kmh"
+  }
+}

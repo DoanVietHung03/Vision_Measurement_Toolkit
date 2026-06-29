@@ -1,0 +1,34 @@
+﻿{
+  "input": {
+    "image_path": "assets/Video test/Video test/cam_2/frame_test.jpg",
+    "video_path": "assets/sample_videos/cam_2.mp4"
+  },
+  "depth": {
+    "model_repo": "depth-anything/Depth-Anything-V2-Small-hf",
+    "scale_factor": 11.06,
+    "process_width": 640,
+    "reference_distance_m": 15.3
+  },
+  "camera": {
+    "fx": 1600.0,
+    "fy": 1600.0,
+    "cx": 600.0,
+    "cy": 337.5,
+    "reference_width": 1200.0
+  },
+  "measurement": {
+    "point_a": [520.0, 500.0],
+    "point_b": [700.0, 500.0],
+    "raw_depth_a": 1.0,
+    "raw_depth_b": 1.0
+  },
+  "model": {
+    "yolo_path": "assets/weights/yolo11n.onnx",
+    "confidence": 0.35
+  },
+  "video": {
+    "display_width": 1200,
+    "depth_skip": 2,
+    "detect_skip": 5
+  }
+}

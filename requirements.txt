@@ -1,0 +1,11 @@
+﻿numpy>=2.0
+opencv-contrib-python>=4.10
+torch>=2.5
+ultralytics>=8.4
+supervision>=0.24
+transformers>=4.45
+Pillow>=10.0
+pandas>=2.2
+matplotlib>=3.9
+onnx>=1.17
+onnxruntime-gpu>=1.20

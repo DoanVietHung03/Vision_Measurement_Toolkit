@@ -1,0 +1,12 @@
+﻿{
+  "input": {
+    "image_glob": "assets/checkerBoard/calibration_images/*.jpg"
+  },
+  "camera_calibration": {
+    "pattern_size": [9, 6],
+    "square_size_m": 0.034,
+    "fisheye": false,
+    "output_json": "configs/generated_camera_calibration.json",
+    "debug_dir": "assets/calibration_debug"
+  }
+}
