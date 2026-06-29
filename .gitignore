@@ -1,0 +1,8 @@
+venv/
+env/
+pycache/
+*.pyc
+*.pyo
+weights/
+Video_test/
+*.mp4
