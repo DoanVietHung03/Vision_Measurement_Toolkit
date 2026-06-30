@@ -1,35 +1,33 @@
-# Runtime Readiness Checklist
+﻿# Checklist Sẵn Sàng Chạy Runtime
 
-Tai lieu nay tong hop trang thai hien tai sau khi gop va refactor hai pipeline
-Distance + Velocity/Speed vao package chung `vision_measurement`.
+Tài liệu này tổng hợp trạng thái hiện tại sau khi gộp và refactor hai pipeline Distance + Velocity/Speed vào package chung `vision_measurement`.
 
-## Ket Luan Nhanh
+## Kết Luận Nhanh
 
-Source code hien da on o muc package, unit test va smoke test khong phu thuoc
-artifact lon.
+Source code hiện đã ổn ở mức package, unit test và smoke test không phụ thuộc artifact lớn.
 
-De chay that hai module chinh, phan con thieu chu yeu la:
+Để chạy thật hai module chính, phần còn thiếu chủ yếu là:
 
-- dependency runtime chua cai du trong environment hien tai;
-- model YOLO/Depth, video dau vao va file ground-truth chua co trong `assets/`;
-- calibration that cho tung camera/video chua duoc tao hoac chua duoc dien vao config.
+- dependency runtime chưa cài đủ trong environment hiện tại;
+- model YOLO/Depth, video đầu vào và file ground-truth chưa có trong `assets/`;
+- calibration thật cho từng camera/video chưa được tạo hoặc chưa được điền vào config.
 
-## Trang Thai Source Hien Tai
+## Trạng Thái Source Hiện Tại
 
-Da kiem tra:
+Đã kiểm tra:
 
 ```powershell
 python -m unittest discover -s tests -v
 ```
 
-Ket qua:
+Kết quả:
 
 ```text
 Ran 19 tests
 OK
 ```
 
-Smoke test da chay duoc:
+Smoke test đã chạy được:
 
 ```powershell
 python apps\run_distance_homography.py --config configs\distance_homography.json
@@ -37,15 +35,15 @@ python apps\run_distance_depth.py --config configs\distance_depth.json --no-disp
 python apps\run_speed_lane.py --config configs\speed_vehicle_lane.json --dry-run
 ```
 
-Ket qua y nghia:
+Ý nghĩa kết quả:
 
-- Homography distance points mode chay duoc va tra `distance_m = 3.0`.
-- Depth raw-depth smoke chay duoc va tra `distance_m = 1.24425`.
-- Speed dry-run doc config duoc va in ra path/model/calibration readiness.
+- Homography distance points mode chạy được và trả `distance_m = 3.0`.
+- Depth raw-depth smoke chạy được và trả `distance_m = 1.24425`.
+- Speed dry-run đọc config được và in ra path/model/calibration readiness.
 
-## Dependency Runtime Con Thieu
+## Dependency Runtime Còn Thiếu
 
-Environment hien tai da co nhieu package chinh, nhung con thieu:
+Environment hiện tại đã có nhiều package chính, nhưng còn thiếu:
 
 ```text
 supervision
@@ -53,28 +51,28 @@ transformers
 onnxruntime
 ```
 
-Ghi chu:
+Ghi chú:
 
-- `supervision` can cho module speed video UI, polygon zone, annotation va frame generator.
-- `transformers` can cho Depth-Anything inference.
-- `onnxruntime` can cho model ONNX CPU runtime.
-- May hien tai bao `torch.cuda.is_available() == False`, nen neu chay tren may nay thi nen uu tien `onnxruntime` CPU thay vi `onnxruntime-gpu`, tru khi da cau hinh lai CUDA day du.
+- `supervision` cần cho module speed video UI, polygon zone, annotation và frame generator.
+- `transformers` cần cho Depth-Anything inference.
+- `onnxruntime` cần cho model ONNX CPU runtime.
+- Máy hiện tại báo `torch.cuda.is_available() == False`, nên nếu chạy trên máy này thì nên ưu tiên `onnxruntime` CPU thay vì `onnxruntime-gpu`, trừ khi đã cấu hình lại CUDA đầy đủ.
 
-Lenh cai goi goi y:
+Lệnh cài gợi ý:
 
 ```powershell
 python -m pip install supervision transformers onnxruntime
 ```
 
-Neu dung moi truong CUDA/GPU that:
+Nếu dùng môi trường CUDA/GPU thật:
 
 ```powershell
 python -m pip install onnxruntime-gpu
 ```
 
-## Artifact Chung Dang Thieu
+## Artifact Chung Đang Thiếu
 
-Theo cac config hien tai, cac path sau chua ton tai:
+Theo các config hiện tại, các path sau chưa tồn tại:
 
 ```text
 assets/sample_videos/cam_2.mp4
@@ -87,7 +85,7 @@ assets/ground_truth/gt_data.pkl
 assets/sample_images/lane_mask.png
 ```
 
-Path da ton tai va dang duoc dung cho smoke test:
+Path đã tồn tại và đang được dùng cho smoke test:
 
 ```text
 assets/checkerBoard/calibration_images/calib_000.jpg
@@ -109,13 +107,13 @@ Config:
 configs/distance_homography.json
 ```
 
-Da chay duoc:
+Đã chạy được:
 
 - mode `points`;
-- mode `image` neu chi dung anh co san va khong bat detect/height/undistort;
-- logic `PlaneCalibration`, transform point, distance, CSV serialization.
+- mode `image` nếu chỉ dùng ảnh có sẵn và không bật detect/height/undistort;
+- logic `PlaneCalibration`, transform point, distance và CSV serialization.
 
-Con thieu de chay day du workflow cu:
+Còn thiếu để chạy đầy đủ workflow cũ:
 
 ```text
 assets/sample_videos/cam_2.mp4
@@ -123,38 +121,38 @@ assets/weights/yolo11n-pose.onnx
 configs/generated_camera_calibration.json
 ```
 
-Con can calibration that:
+Còn cần calibration thật:
 
-- `source_points`: 4 diem tren mat phang trong anh/video that;
-- `target_width`, `target_height`: kich thuoc bird-eye-view;
-- `meters_per_pixel`: ty le met/pixel sau khi transform;
-- camera calibration JSON neu dung `--undistort` hoac `--height`.
+- `source_points`: 4 điểm trên mặt phẳng trong ảnh/video thật;
+- `target_width`, `target_height`: kích thước bird-eye-view;
+- `meters_per_pixel`: tỷ lệ mét/pixel sau khi transform;
+- camera calibration JSON nếu dùng `--undistort` hoặc `--height`.
 
-Lenh smoke hien tai:
+Lệnh smoke hiện tại:
 
 ```powershell
 python apps\run_distance_homography.py --config configs\distance_homography.json
 ```
 
-Lenh chay image khong mo UI:
+Lệnh chạy image không mở UI:
 
 ```powershell
 python apps\run_distance_homography.py --config configs\distance_homography.json --mode image --no-display
 ```
 
-Lenh chay video sau khi co artifact:
+Lệnh chạy video sau khi có artifact:
 
 ```powershell
 python apps\run_distance_homography.py --config configs\distance_homography.json --mode video --no-display --max-frames 100
 ```
 
-Neu can detect person/pose:
+Nếu cần detect person/pose:
 
 ```powershell
 python apps\run_distance_homography.py --config configs\distance_homography.json --mode video --detect --no-display --max-frames 100
 ```
 
-Neu can height/undistort:
+Nếu cần height/undistort:
 
 ```powershell
 python apps\run_distance_homography.py --config configs\distance_homography.json --mode video --detect --height --undistort --no-display --max-frames 100
@@ -174,14 +172,14 @@ Config:
 configs/distance_depth.json
 ```
 
-Da chay duoc:
+Đã chạy được:
 
 - raw-depth smoke mode;
 - `MetricDepthProjector`;
-- cong thuc `Z = SCALE_FACTOR / raw_depth`;
-- distance 3D tu hai pixel co raw depth.
+- công thức `Z = SCALE_FACTOR / raw_depth`;
+- distance 3D từ hai pixel có raw depth.
 
-Con thieu de chay inference/video/person calibration:
+Còn thiếu để chạy inference/video/person calibration:
 
 ```text
 transformers
@@ -190,32 +188,32 @@ assets/sample_videos/cam_2.mp4
 assets/weights/yolo11n.onnx
 ```
 
-Con can calibration that:
+Còn cần calibration thật:
 
-- `scale_factor` theo scene/camera that;
-- `fx`, `fy`, `cx`, `cy` theo camera that;
-- `reference_width` dung voi resolution calibration;
-- diem pixel `point_a`, `point_b` phu hop voi anh/video that.
+- `scale_factor` theo scene/camera thật;
+- `fx`, `fy`, `cx`, `cy` theo camera thật;
+- `reference_width` đúng với resolution calibration;
+- điểm pixel `point_a`, `point_b` phù hợp với ảnh/video thật.
 
-Lenh smoke hien tai:
+Lệnh smoke hiện tại:
 
 ```powershell
 python apps\run_distance_depth.py --config configs\distance_depth.json --no-display
 ```
 
-Lenh one-shot depth inference sau khi co dependency/model:
+Lệnh one-shot depth inference sau khi có dependency/model:
 
 ```powershell
 python apps\run_distance_depth.py --config configs\distance_depth.json --infer-depth --no-display
 ```
 
-Lenh realtime depth video sau khi co artifact:
+Lệnh realtime depth video sau khi có artifact:
 
 ```powershell
 python apps\run_distance_depth.py --config configs\distance_depth.json --realtime-video --no-display --max-frames 100
 ```
 
-Lenh calibrate scale bang nguoi tham chieu:
+Lệnh calibrate scale bằng người tham chiếu:
 
 ```powershell
 python apps\run_distance_depth.py --config configs\distance_depth.json --infer-depth --calibrate-person --real-distance-m 15.3 --no-display
@@ -235,14 +233,14 @@ Config:
 configs/speed_vehicle_lane.json
 ```
 
-Da chay duoc:
+Đã chạy được:
 
-- dry-run doc config;
+- dry-run đọc config;
 - BEV transform;
 - `SpeedEstimator`;
 - validation/calibration unit test.
 
-Con thieu de chay video tracking that:
+Còn thiếu để chạy video tracking thật:
 
 ```text
 supervision
@@ -251,7 +249,7 @@ assets/sample_videos/road.mp4
 assets/weights/yolo12n.onnx
 ```
 
-Con thieu neu can validate/calibrate bang ground truth:
+Còn thiếu nếu cần validate/calibrate bằng ground truth:
 
 ```text
 assets/ground_truth/gt_data.pkl
@@ -263,26 +261,26 @@ Optional:
 assets/sample_images/lane_mask.png
 ```
 
-Con can calibration that cho dung video/camera:
+Còn cần calibration thật cho đúng video/camera:
 
-- `source_points`: 4 diem polygon lane tren frame;
-- `target_width`, `target_height`: kich thuoc BEV;
-- `meters_per_pixel`: ty le thuc te;
-- `target_classes`: class id YOLO dung voi model dang dung.
+- `source_points`: 4 điểm polygon lane trên frame;
+- `target_width`, `target_height`: kích thước BEV;
+- `meters_per_pixel`: tỷ lệ thực tế;
+- `target_classes`: class id YOLO đúng với model đang dùng.
 
-Lenh dry-run hien tai:
+Lệnh dry-run hiện tại:
 
 ```powershell
 python apps\run_speed_lane.py --config configs\speed_vehicle_lane.json --dry-run
 ```
 
-Lenh video smoke sau khi co artifact:
+Lệnh video smoke sau khi có artifact:
 
 ```powershell
 python apps\run_speed_lane.py --config configs\speed_vehicle_lane.json --no-display --max-frames 100
 ```
 
-Lenh validate PKL sau khi co ground truth:
+Lệnh validate PKL sau khi có ground truth:
 
 ```powershell
 python apps\run_speed_lane.py --config configs\speed_vehicle_lane.json --validate-pkl assets/ground_truth/gt_data.pkl
@@ -302,39 +300,39 @@ Config:
 configs/camera_calibration.json
 ```
 
-Output mong doi:
+Output mong đợi:
 
 ```text
 configs/generated_camera_calibration.json
 ```
 
-Anh checkerboard hien co:
+Ảnh checkerboard hiện có:
 
 ```text
 assets/checkerBoard/calibration_images/*.jpg
 ```
 
-Lenh tao calibration JSON:
+Lệnh tạo calibration JSON:
 
 ```powershell
 python apps\run_camera_calibration.py --config configs\camera_calibration.json --no-undistorted
 ```
 
-Can kiem tra lai:
+Cần kiểm tra lại:
 
-- `pattern_size` hien la `[9, 6]`;
-- `square_size_m` hien la `0.034`;
-- neu detect duoc qua it anh checkerboard thi can doi pattern size, square size hoac bo anh calibration khac.
+- `pattern_size` hiện là `[9, 6]`;
+- `square_size_m` hiện là `0.034`;
+- nếu detect được quá ít ảnh checkerboard thì cần đổi pattern size, square size hoặc dùng bộ ảnh calibration khác.
 
-## Thu Tu Lam De Chay That
+## Thứ Tự Làm Để Chạy Thật
 
-1. Cai dependency runtime con thieu:
+1. Cài dependency runtime còn thiếu:
 
 ```powershell
 python -m pip install supervision transformers onnxruntime
 ```
 
-2. Dat model vao:
+2. Đặt model vào:
 
 ```text
 assets/weights/yolo11n-pose.onnx
@@ -342,30 +340,30 @@ assets/weights/yolo11n.onnx
 assets/weights/yolo12n.onnx
 ```
 
-Hoac sua config de tro toi model that dang co.
+Hoặc sửa config để trỏ tới model thật đang có.
 
-3. Dat video vao:
+3. Đặt video vào:
 
 ```text
 assets/sample_videos/cam_2.mp4
 assets/sample_videos/road.mp4
 ```
 
-Hoac sua config de tro toi video that dang co.
+Hoặc sửa config để trỏ tới video thật đang có.
 
-4. Tao camera calibration:
+4. Tạo camera calibration:
 
 ```powershell
 python apps\run_camera_calibration.py --config configs\camera_calibration.json --no-undistorted
 ```
 
-5. Chinh calibration cho tung module:
+5. Chỉnh calibration cho từng module:
 
 - `configs/distance_homography.json`
 - `configs/distance_depth.json`
 - `configs/speed_vehicle_lane.json`
 
-6. Chay smoke co gioi han frame:
+6. Chạy smoke có giới hạn frame:
 
 ```powershell
 python apps\run_distance_homography.py --config configs\distance_homography.json --mode video --no-display --max-frames 100
@@ -373,7 +371,7 @@ python apps\run_distance_depth.py --config configs\distance_depth.json --realtim
 python apps\run_speed_lane.py --config configs\speed_vehicle_lane.json --no-display --max-frames 100
 ```
 
-7. Neu smoke pass, moi mo UI de kiem tra annotation:
+7. Nếu smoke pass, mở UI để kiểm tra annotation:
 
 ```powershell
 python apps\run_distance_homography.py --config configs\distance_homography.json --mode video --detect
@@ -381,27 +379,26 @@ python apps\run_distance_depth.py --config configs\distance_depth.json --realtim
 python apps\run_speed_lane.py --config configs\speed_vehicle_lane.json
 ```
 
-## Acceptance Gate De Xem La San Sang Chay
+## Acceptance Gate Để Xem Là Sẵn Sàng Chạy
 
-Module Distance duoc xem la san sang khi:
+Module Distance được xem là sẵn sàng khi:
 
-- co video/anh dung scene;
-- co YOLO pose model neu can detect/height;
-- co camera calibration neu can undistort/height;
-- homography source points va meters-per-pixel da duoc calibrate;
-- depth scale factor va intrinsics da duoc calibrate;
-- chay duoc `--max-frames 100` khong loi.
+- có video/ảnh đúng scene;
+- có YOLO pose model nếu cần detect/height;
+- có camera calibration nếu cần undistort/height;
+- homography source points và meters-per-pixel đã được calibrate;
+- depth scale factor và intrinsics đã được calibrate;
+- chạy được `--max-frames 100` không lỗi.
 
-Module Speed duoc xem la san sang khi:
+Module Speed được xem là sẵn sàng khi:
 
-- co video road that;
-- co YOLO detect model;
-- co `supervision` va ONNX runtime;
-- lane source points va meters-per-pixel dung voi video;
-- chay duoc `--max-frames 100` va co speed label hop ly;
-- neu co `gt_data.pkl`, validation sai so nam trong nguong chap nhan.
+- có video road thật;
+- có YOLO detect model;
+- có `supervision` và ONNX runtime;
+- lane source points và meters-per-pixel đúng với video;
+- chạy được `--max-frames 100` và có speed label hợp lý;
+- nếu có `gt_data.pkl`, validation sai số nằm trong ngưỡng chấp nhận.
 
-## Ghi Chu Ve Git
+## Ghi Chú Về Git
 
-Theo yeu cau hien tai, khong can va khong nen thuc hien bat ky thao tac Git nao
-trong qua trinh bo sung artifact, chay smoke hay chinh config.
+Theo yêu cầu hiện tại, không cần và không nên thực hiện bất kỳ thao tác Git nào trong quá trình bổ sung artifact, chạy smoke hoặc chỉnh config.
